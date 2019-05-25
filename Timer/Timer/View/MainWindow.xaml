@@ -6,11 +6,48 @@
         xmlns:local="clr-namespace:Timer"
         xmlns:vm="clr-namespace:Timer.ViewModel"
         mc:Ignorable="d"
-        Title="Timer" Height="450" Width="800">
+        Title="Секундомер" Height="450" Width="800">
 
     <Window.DataContext>
         <vm:TimerViewModel/>
     </Window.DataContext>
+
+    <Window.Resources>
+        <Style x:Key="PressedButton" TargetType="Button">
+            <Setter Property="Background" Value="Gray" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border CornerRadius="4" Background="{TemplateBinding Background}">
+                            <ContentPresenter x:Name="MyContentPresenter" Content="{TemplateBinding Content}" 
+                                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#FFD3CCCC" />
+                                <Setter Property="Foreground" Value="#FF716D6D" />
+                            </Trigger>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF2DA905" />
+                                <Setter Property="Foreground" Value="Black" />
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#BFA28F16" />
+                                <Setter Property="Foreground" Value="Black" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     
     <Grid>
         <Grid.ColumnDefinitions>
@@ -37,10 +74,12 @@
                 </Grid.ColumnDefinitions>
 
                 <Button Command="{Binding StartStopTimer}" Margin="25" 
-                        Content="Старт/Пауза"/>
-                <Button Command="{Binding TimerReset}" Margin="25" 
+                        Style="{StaticResource PressedButton}" Content="Старт/Пауза"/>
+                <Button Command="{Binding TimerReset}" Margin="25"
+                        Style="{StaticResource PressedButton}"
                         Grid.Column="1" Content="Рестарт"/>
-                <Button Command="{Binding AddLap}" Margin="25" 
+                <Button Command="{Binding AddLap}" Margin="25"
+                        Style="{StaticResource PressedButton}"
                         Grid.Column="2" Content="Круг"/>
             </Grid>
         </Grid>
