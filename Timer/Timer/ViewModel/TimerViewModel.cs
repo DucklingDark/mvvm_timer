@@ -26,6 +26,28 @@ namespace Timer.ViewModel
                 return new DelegateCommand((obj) =>
                 {
                     Timer.AddLap();
+                }, (obj)=> Timer.Start == true );
+            }
+        }
+
+        public ICommand TimerReset
+        {
+            get
+            {
+                return new DelegateCommand((obj) =>
+                {
+                    Timer.TimerReset();
+                });
+            }
+        }
+
+        public ICommand StartStopTimer
+        {
+            get
+            {
+                return new DelegateCommand((obj) =>
+                {
+                    Timer.StartStopTimer();
                 });
             }
         }

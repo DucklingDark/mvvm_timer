@@ -60,6 +60,7 @@ namespace Timer.Model
         private DispatcherTimer dt;
         private long elapsedTime;
         private long lastTime;
+        private bool start;
 
         public string Time
         {
@@ -81,6 +82,15 @@ namespace Timer.Model
             }
         }
 
+        public bool Start
+        {
+            get { return start; }
+            set
+            {
+                start = value;
+                OnPropertyChanged("Start");
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName)
         {
@@ -90,11 +100,12 @@ namespace Timer.Model
         public TimerModel()
         {
             dt = new DispatcherTimer();
-            dt.Interval = new TimeSpan(0, 0, 1);
+            dt.Interval = TimeSpan.FromSeconds(1);
             dt.Tick += Timer_Tick;
-            dt.Start();
             Laps = new ObservableCollection<Lap>();
+            Time = "00:00:00";
             lastTime = 0;
+            Start = false;
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -114,6 +125,28 @@ namespace Timer.Model
             tempLapTime += string.Format("{0:D2}:{1:D2}:{2:D2}",
                                           tempT.Hours, tempT.Minutes, tempT.Seconds);
             Laps.Add(new Lap { LapNumber = Laps.Count + 1, LapTime = tempLapTime, FullTime = tempFullTime});
+        }
+
+        public void TimerReset()
+        {
+            Time = "00:00:00";
+            elapsedTime = 0;
+            lastTime = 0;
+            laps.Clear();
+        }
+
+        public void StartStopTimer()
+        {
+            Start = !Start;
+
+            if (Start)
+            {
+                dt.Start();
+            }
+            else
+            {
+                dt.Stop();
+            }
         }
     }
 }
