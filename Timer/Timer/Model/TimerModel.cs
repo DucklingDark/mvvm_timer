@@ -10,10 +10,47 @@ using System.Windows.Threading;
 
 namespace Timer.Model
 {
-    struct Lap
+    class Lap : INotifyPropertyChanged
     {
-        public int number;
-        public string lapTime;
+        private int lapNumber;
+        private string fullTime;
+        private string lapTime;
+
+        public int LapNumber
+        {
+            get { return lapNumber; }
+            set
+            {
+                lapNumber = value;
+                OnPropertyChanged("LapNumber");
+            }
+        }
+
+        public string FullTime
+        {
+            get { return fullTime; }
+            set
+            {
+                fullTime = value;
+                OnPropertyChanged("FullTime");
+            }
+        }
+
+        public string LapTime
+        {
+            get { return lapTime; }
+            set
+            {
+                lapTime = value;
+                OnPropertyChanged("LapTime");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
     class TimerModel : INotifyPropertyChanged
@@ -22,6 +59,7 @@ namespace Timer.Model
         private ObservableCollection<Lap> laps;
         private DispatcherTimer dt;
         private long elapsedTime;
+        private long lastTime;
 
         public string Time
         {
@@ -46,8 +84,7 @@ namespace Timer.Model
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public TimerModel()
@@ -56,6 +93,8 @@ namespace Timer.Model
             dt.Interval = new TimeSpan(0, 0, 1);
             dt.Tick += Timer_Tick;
             dt.Start();
+            Laps = new ObservableCollection<Lap>();
+            lastTime = 0;
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -63,8 +102,18 @@ namespace Timer.Model
             elapsedTime += 1000;
             TimeSpan t = TimeSpan.FromMilliseconds(elapsedTime);
             Time = string.Format("{0:D2}:{1:D2}:{2:D2}",
-                                 t.Hours, t.Minutes,
-                                 t.Seconds);
+                                 t.Hours, t.Minutes, t.Seconds);
+        }
+
+        public void AddLap()
+        {
+            string tempFullTime = "Общее время: " + Time;
+            TimeSpan tempT = TimeSpan.FromMilliseconds(elapsedTime - lastTime);
+            lastTime = elapsedTime;
+            string tempLapTime = "Время круга: ";
+            tempLapTime += string.Format("{0:D2}:{1:D2}:{2:D2}",
+                                          tempT.Hours, tempT.Minutes, tempT.Seconds);
+            Laps.Add(new Lap { LapNumber = Laps.Count + 1, LapTime = tempLapTime, FullTime = tempFullTime});
         }
     }
 }

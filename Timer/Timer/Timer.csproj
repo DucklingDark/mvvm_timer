@@ -64,6 +64,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\TimerModel.cs" />
+    <Compile Include="ViewModel\DelegateCommand.cs" />
     <Compile Include="ViewModel\TimerViewModel.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

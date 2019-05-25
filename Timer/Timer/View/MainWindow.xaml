@@ -38,12 +38,23 @@
 
                 <Button Margin="25" Content="Старт/Пауза"/>
                 <Button Margin="25" Grid.Column="1" Content="Рестарт"/>
-                <Button Margin="25" Grid.Column="2" Content="Круг"/>
+                <Button Command="{Binding AddLap}" Margin="25" Grid.Column="2" Content="Круг"/>
             </Grid>
         </Grid>
-        
-        <ListBox   ItemsSource="{Binding Timer.Laps}"
-                   Margin="5" Grid.Column="1" 
-                   Background="#FFC3BEBE"/>
+
+        <ListBox ItemsSource="{Binding Timer.Laps}"
+                 Margin="5" Grid.Column="1" 
+                 Background="#FFC3BEBE">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="5">
+                        <TextBlock FontSize="24" Text="{Binding LapNumber}" />
+                        <TextBlock FontSize="14" Text="{Binding LapTime}" />
+                        <TextBlock FontSize="14" Text="{Binding FullTime}" />
+                        <Separator FontSize="20" Width="220" Foreground="Black"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </Window>
