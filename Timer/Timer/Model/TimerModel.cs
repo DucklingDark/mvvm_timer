@@ -10,7 +10,7 @@ using System.Windows.Threading;
 
 namespace Timer.Model
 {
-    class Lap : INotifyPropertyChanged
+    public class Lap : INotifyPropertyChanged
     {
         private int lapNumber;
         private string fullTime;
@@ -53,7 +53,7 @@ namespace Timer.Model
         }
     }
 
-    class TimerModel : INotifyPropertyChanged
+    public class TimerModel : INotifyPropertyChanged
     {
         private string time;
         private ObservableCollection<Lap> laps;
